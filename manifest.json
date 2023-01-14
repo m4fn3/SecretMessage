@@ -1,0 +1,12 @@
+{
+   "name": "SecretMessage",
+   "version": "1.0.0",
+   "description": "Send secret message that only your friend can understand.",
+   "authors": [
+      {
+         "name": "mafu",
+         "id": "519760564755365888"
+      }
+   ],
+   "color": "#008b8b"
+}
