@@ -6,6 +6,7 @@ import {Linking} from "enmity/metro/common"
 import {name, version} from '../../manifest.json'
 import {getIDByName} from "enmity/api/assets";
 import {getByProps} from "enmity/modules";
+import {reload} from "enmity/api/native";
 
 interface SettingsProps {
     settings: SettingsStore;
@@ -13,6 +14,7 @@ interface SettingsProps {
 
 const LockIcon = getIDByName('ic_lock')
 const GiftIcon = getIDByName('ic_gift')
+const ReloadIcon = getIDByName('ic_message_retry')
 const GitHubIcon = getIDByName('img_account_sync_github_white')
 const DiscordIcon = getIDByName('Discord')
 const TwitterIcon = getIDByName('img_account_sync_twitter_white')
@@ -108,6 +110,15 @@ export default ({settings}: SettingsProps) => {
                             }}
                         />
                     }
+                />
+                <FormRow
+                    label="Reload Discord"
+                    trailing={FormRow.Arrow}
+                    leading={<FormRow.Icon source={ReloadIcon}/>}
+                    subLabel="You may need to reload Discord to apply changes to loaded messages."
+                    onPress={() => {
+                        reload()
+                    }}
                 />
             </FormSection>
             <FormSection title="INFORMATION">

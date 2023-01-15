@@ -3,14 +3,14 @@ import {React, Messages} from 'enmity/metro/common'
 import {Pressable} from 'enmity/components'
 import {bulk, filters} from "enmity/modules"
 import {findInReactTree} from "enmity/utilities"
-import {getIDByName} from "enmity/api/assets"
+import {getByID, getIDByName} from "enmity/api/assets"
 import {create} from 'enmity/patcher'
 // @ts-ignore
 import manifest, {name} from '../manifest.json'
 import Settings from "./components/Settings"
 import {getStoreHandlers} from "./utils/store"
-import {decryptMessage, e, encryptMessage} from "./utils/encryption"
-import {get, set, toggle} from "enmity/api/settings"
+import {decryptMessage, encryptMessage} from "./utils/encryption"
+import {get, set} from "enmity/api/settings"
 
 const Patcher = create('SecretMessage')
 
@@ -48,9 +48,21 @@ const SecretMessage: Plugin = {
             initVariable(...meta)
         })
 
+        let giftButtonID = null
         // Patch gift button
         Patcher.after(Pressable.type, 'render', (self, args, res) => {
-            if (get(name, "hijack_gift") && res.props?.children[0]?.props?.source === 692) { // take over Gift button
+            if (get(name, "hijack_gift") && typeof res.props?.children[0]?.props?.source == "number") { // take over Gift button
+                let sourceId = res.props.children[0].props.source
+                // cache id
+                if (giftButtonID && sourceId !== giftButtonID){
+                    return
+                } else if (!giftButtonID) {
+                    if (getByID(sourceId).httpServerLocation === "/assets/modules/chat_input/native/images"){
+                        giftButtonID = sourceId // check location
+                    } else {
+                        return
+                    }
+                }
                 res.props.children[0].props.source = get(name, "enabled") ? ShowIcon : HideIcon
                 args[0].onPress = () => {
                     // switch state
@@ -66,7 +78,7 @@ const SecretMessage: Plugin = {
         Patcher.after(ChatInput.default.prototype, 'render', (self, args, res) => {
             let obj = findInReactTree(res, r => r.props?.placeholder)
             if (obj) {
-                obj.props.placeholder = get(name, "enabled") ? "send secret message" : obj.props.placeholder
+                obj.props.placeholder = get(name, "enabled") ? "Send *secret* message" : "Send normal message" // obj.props.placeholder
             }
         })
 
