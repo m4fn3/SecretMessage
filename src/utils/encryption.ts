@@ -11,7 +11,7 @@ function e(text, key) {
 }
 
 function getPrefix(key) {
-    return `|${e(name, key).slice(0, 3)}|`
+    return `|${e("まふわーるど", key).slice(0, 3)}|`
 }
 
 function decryptMessage(text) {
