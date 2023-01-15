@@ -55,7 +55,7 @@ const SecretMessage: Plugin = {
 
         let giftButtonID = null
         let sendButtonId = getIDByName("ic_send")
-        let orgSendButtonColor = null
+        let orgSendButtonColor = "#5865f2"
         // Patch gift button
         Patcher.after(Pressable.type, 'render', (self, args, res) => {
             if (typeof res.props?.children[0]?.props?.source == "number") {
@@ -66,7 +66,7 @@ const SecretMessage: Plugin = {
                 } else if (sourceId == sendButtonId) {
                     buttonType = "send"
                 } else if (!giftButtonID && getByID(sourceId).httpServerLocation === "/assets/modules/chat_input/native/images") {
-                    giftButtonID = sourceId // this id will depend on ver
+                    giftButtonID = sourceId // this id will depend on version
                     buttonType = "gift"
                 } else {
                     return
@@ -82,7 +82,7 @@ const SecretMessage: Plugin = {
                     }
                 } else if (buttonType == "send") {
                     let color = res.props?.style[0][1]?.backgroundColor
-                    if (color && color != "#e74c3c") orgSendButtonColor = color
+                    if (color && color != "#e74c3c") orgSendButtonColor = color  // save original color as it may be theme specific; default color is #5865f2
                     res.props.style[0][1].backgroundColor = get(name, "enabled") ? "#e74c3c" : orgSendButtonColor
                 }
             }
@@ -92,7 +92,7 @@ const SecretMessage: Plugin = {
         Patcher.after(ChatInput.default.prototype, 'render', (self, args, res) => {
             let obj = findInReactTree(res, r => r.props?.placeholder)
             if (obj) {
-                obj.props.placeholder = get(name, "enabled") ? "Send *secret* message" : "Send normal message" // obj.props.placeholder
+                obj.props.placeholder = get(name, "enabled") ? "Send *secret* message" : "Send normal message"
             }
         })
 
