@@ -23,7 +23,7 @@ function decryptMessage(text) {
     let prefix = getPrefix(key)
     let suffix = getSuffix(key)
     if (text.startsWith(prefix)) {
-        return `${e(text.slice(0, -1).replace(prefix, ""), key)} ${suffix}` // eemove prefix and | at the end
+        return `${e(text.slice(0, -1).replace(prefix, ""), key)} ${suffix}` // remove prefix and | at the end
     } else {
         return text
     }

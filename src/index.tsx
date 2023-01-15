@@ -77,7 +77,8 @@ const SecretMessage: Plugin = {
                         // switch state
                         set(name, "enabled", !get(name, "enabled"))
                         // reload chatInput to apply changes
-                        Keyboard.openSystemKeyboard()
+                        Keyboard.setText("") // for send button
+                        Keyboard.openSystemKeyboard() // for visibility icon
                         Keyboard.dismissKeyboard()
                     }
                 } else if (buttonType == "send") {
