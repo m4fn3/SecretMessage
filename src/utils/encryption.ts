@@ -11,7 +11,7 @@ function e(text, key) {
 }
 
 function getPrefix(key) {
-    return `|${e("secret", key).slice(0, 3)}|`
+    return `|${e("secret", key).slice(0, 3)}|` // surrounding text with | is required to avoid being message content like space unexpectedly removed by Discord
 }
 
 function getSuffix(key) {
@@ -23,7 +23,7 @@ function decryptMessage(text) {
     let prefix = getPrefix(key)
     let suffix = getSuffix(key)
     if (text.startsWith(prefix)) {
-        return `${e(text.slice(0, -1).replace(prefix, ""), key)} ${suffix}` // 末尾の|を削除してから接頭辞を削除
+        return `${e(text.slice(0, -1).replace(prefix, ""), key)} ${suffix}` // eemove prefix and | at the end
     } else {
         return text
     }

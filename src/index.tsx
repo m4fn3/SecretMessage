@@ -58,7 +58,7 @@ const SecretMessage: Plugin = {
         let orgSendButtonColor = "#5865f2"
         // Patch gift button
         Patcher.after(Pressable.type, 'render', (self, args, res) => {
-            if (typeof res.props?.children[0]?.props?.source == "number") {
+            if (typeof res.props?.children[0]?.props?.source == "number") { // get by it's source id of image; label is localized and will be language specific
                 let sourceId = res.props.children[0].props.source
                 let buttonType = null
                 if (giftButtonID && sourceId == giftButtonID) {
