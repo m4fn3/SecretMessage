@@ -11,6 +11,7 @@ import Settings from "./components/Settings"
 import {getStoreHandlers} from "./utils/store"
 import {decryptMessage, encryptMessage} from "./utils/encryption"
 import {get, set} from "enmity/api/settings"
+import {secret} from "./components/Commands";
 
 const Patcher = create('SecretMessage')
 
@@ -42,6 +43,10 @@ function initVariable(valName, defVal, force = false) {
 const SecretMessage: Plugin = {
     ...manifest,
     onStart() {
+        // add commands
+        this.commands = [secret]
+
+        // initialize variables
         const metas = [["enabled", false], ["key", "default"], ["hijack_gift", true]]
         metas.forEach((meta) => {
             // @ts-ignore
@@ -63,7 +68,7 @@ const SecretMessage: Plugin = {
                         return
                     }
                 }
-                res.props.children[0].props.source = get(name, "enabled") ? ShowIcon : HideIcon
+                res.props.children[0].props.source = get(name, "enabled") ? HideIcon : ShowIcon
                 args[0].onPress = () => {
                     // switch state
                     set(name, "enabled", !get(name, "enabled"))
@@ -120,7 +125,8 @@ const SecretMessage: Plugin = {
         })
     },
     onStop() {
-        Patcher.unpatchAll();
+        this.commands = []
+        Patcher.unpatchAll()
     },
     getSettingsPanel({settings}) {
         return <Settings settings={settings}/>

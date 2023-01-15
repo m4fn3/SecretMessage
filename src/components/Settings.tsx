@@ -87,7 +87,7 @@ export default ({settings}: SettingsProps) => {
                 />
                 <FormRow
                     label="Enable encryption"
-                    subLabel="You enable it by tapping on the button in chat input if you enable the option below."
+                    subLabel="You can also enable it by tapping on the button in chat input if you enable the option below."
                     leading={<FormRow.Icon source={LockIcon}/>}
                     trailing={
                         <FormSwitch
