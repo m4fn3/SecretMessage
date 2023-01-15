@@ -14,11 +14,16 @@ function getPrefix(key) {
     return `|${e("secret", key).slice(0, 3)}|`
 }
 
+function getSuffix(key) {
+    return `\`<${key.slice(0, 2)}${'*'.repeat(Math.max(key.length - 2, 0))}>\``
+}
+
 function decryptMessage(text) {
     let key = get(name, "key")
     let prefix = getPrefix(key)
+    let suffix = getSuffix(key)
     if (text.startsWith(prefix)) {
-        return `${e(text.slice(0, -1).replace(prefix, ""), key)} \`[secret]\`` // 末尾の|を削除してから接頭辞を削除
+        return `${e(text.slice(0, -1).replace(prefix, ""), key)} ${suffix}` // 末尾の|を削除してから接頭辞を削除
     } else {
         return text
     }
@@ -29,4 +34,4 @@ function encryptMessage(text) {
     return `${getPrefix(key)}${e(text, key)}|`
 }
 
-export {e, decryptMessage, encryptMessage}
+export {e, decryptMessage, encryptMessage, getPrefix, getSuffix}

@@ -9,7 +9,7 @@ import {create} from 'enmity/patcher'
 import manifest, {name} from '../manifest.json'
 import Settings from "./components/Settings"
 import {getStoreHandlers} from "./utils/store"
-import {decryptMessage, encryptMessage} from "./utils/encryption"
+import {decryptMessage, encryptMessage, getSuffix} from "./utils/encryption"
 import {get, set} from "enmity/api/settings"
 import {secret} from "./components/Commands";
 
@@ -121,7 +121,9 @@ const SecretMessage: Plugin = {
             }
         })
         Patcher.before(Messages, "startEditMessage", (self, args, res) => {
-            args[2] = args[2].replace("`[secret]`", "")  // remove [secret] from text when you edit message for better experiences
+            let key = get(name, "key")
+            let suffix = getSuffix(key)
+            args[2] = args[2].replace(suffix, "")  // remove <key***> from text when you edit message for better experiences
         })
     },
     onStop() {

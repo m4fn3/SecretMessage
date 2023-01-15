@@ -115,7 +115,7 @@ export default ({settings}: SettingsProps) => {
                     label="Reload Discord"
                     trailing={FormRow.Arrow}
                     leading={<FormRow.Icon source={ReloadIcon}/>}
-                    subLabel="You may need to reload Discord to apply changes to loaded messages."
+                    subLabel="You need to reload Discord if you wanna apply changes to loaded messages too."
                     onPress={() => {
                         reload()
                     }}
