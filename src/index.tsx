@@ -54,27 +54,36 @@ const SecretMessage: Plugin = {
         })
 
         let giftButtonID = null
+        let sendButtonId = getIDByName("ic_send")
+        let orgSendButtonColor = null
         // Patch gift button
         Patcher.after(Pressable.type, 'render', (self, args, res) => {
-            if (get(name, "hijack_gift") && typeof res.props?.children[0]?.props?.source == "number") { // take over Gift button
+            if (typeof res.props?.children[0]?.props?.source == "number") {
                 let sourceId = res.props.children[0].props.source
-                // cache id
-                if (giftButtonID && sourceId !== giftButtonID){
+                let buttonType = null
+                if (giftButtonID && sourceId == giftButtonID) {
+                    buttonType = "gift"
+                } else if (sourceId == sendButtonId) {
+                    buttonType = "send"
+                } else if (!giftButtonID && getByID(sourceId).httpServerLocation === "/assets/modules/chat_input/native/images") {
+                    giftButtonID = sourceId // this id will depend on ver
+                    buttonType = "gift"
+                } else {
                     return
-                } else if (!giftButtonID) {
-                    if (getByID(sourceId).httpServerLocation === "/assets/modules/chat_input/native/images"){
-                        giftButtonID = sourceId // check location
-                    } else {
-                        return
-                    }
                 }
-                res.props.children[0].props.source = get(name, "enabled") ? HideIcon : ShowIcon
-                args[0].onPress = () => {
-                    // switch state
-                    set(name, "enabled", !get(name, "enabled"))
-                    // reload chatInput to apply changes
-                    Keyboard.openSystemKeyboard()
-                    Keyboard.dismissKeyboard()
+                if (buttonType == "gift") {
+                    res.props.children[0].props.source = get(name, "enabled") ? HideIcon : ShowIcon
+                    args[0].onPress = () => {
+                        // switch state
+                        set(name, "enabled", !get(name, "enabled"))
+                        // reload chatInput to apply changes
+                        Keyboard.openSystemKeyboard()
+                        Keyboard.dismissKeyboard()
+                    }
+                } else if (buttonType == "send") {
+                    let color = res.props?.style[0][1]?.backgroundColor
+                    if (color && color != "#e74c3c") orgSendButtonColor = color
+                    res.props.style[0][1].backgroundColor = get(name, "enabled") ? "#e74c3c" : orgSendButtonColor
                 }
             }
         })
