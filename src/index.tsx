@@ -99,7 +99,7 @@ const SecretMessage: Plugin = {
 
         // Decrypt messages you received
         Patcher.before(MessageStore, "LOAD_MESSAGES_SUCCESS", (self, args, res) => {
-            args[0].messages.map((message) => {
+            args[0].messages = args[0].messages.map((message) => {
                 message.content = message.content ? decryptMessage(message.content) : message.content
                 return message
             })
