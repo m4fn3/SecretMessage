@@ -11,7 +11,7 @@ function e(text, key) {
 }
 
 function getPrefix(key) {
-    return `|${e("secret", key).slice(0, 3)}|` // surrounding text with | is required to avoid being message content like space unexpectedly removed by Discord
+    return `|${e("secret", key).slice(0, 3)}|` // surrounding text with | is required to avoid message content like space being unexpectedly removed by Discord
 }
 
 function getSuffix(key) {
@@ -23,7 +23,8 @@ function decryptMessage(text) {
     let prefix = getPrefix(key)
     let suffix = getSuffix(key)
     if (text.startsWith(prefix)) {
-        return `${e(text.slice(0, -1).replace(prefix, ""), key)} ${suffix}` // remove prefix and | at the end
+        let decrypted = e(decryptNewLine(text.slice(0, -1).replaceAll(prefix, "")), key)
+        return `${decrypted} ${suffix}` // remove prefix and | at the end
     } else {
         return text
     }
@@ -31,7 +32,17 @@ function decryptMessage(text) {
 
 function encryptMessage(text) {
     let key = get(name, "key")
-    return `${getPrefix(key)}${e(text, key)}|`
+    let encrypted = encryptNewLine(e(text, key))
+    return `${getPrefix(key)}${encrypted}|`
+}
+
+// replace new line character with space to avoid message being long
+function decryptNewLine(text) {
+    return text.replaceAll("\u2004", "\r").replaceAll("\u2001", "\n").replaceAll("\u2002", "\x0B").replaceAll("\u2003", "\x0C")
+}
+
+function encryptNewLine(text) {
+    return text.replaceAll("\x0B", "\u2002").replaceAll("\x0C", "\u2003").replaceAll("\r", "\u2004").replaceAll("\n", "\u2001")
 }
 
 export {e, decryptMessage, encryptMessage, getPrefix, getSuffix}
