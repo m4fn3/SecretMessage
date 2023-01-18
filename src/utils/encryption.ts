@@ -2,6 +2,8 @@
 import manifest, {name} from '../../manifest.json'
 import {get} from "enmity/api/settings"
 
+let wrapper = ["\u05C2" ,"\u05C4","\u05C5","\u0740","\u08EA","\u08ED"]
+
 function e(text, key) {
     let result = ''
     for (let i = 0; i < text.length; i++) {
@@ -10,8 +12,12 @@ function e(text, key) {
     return result
 }
 
+function getWrap(key){
+    return wrapper[key.length % 6]
+}
+
 function getPrefix(key) {
-    return `|${e("secret", key).slice(0, 3)}|` // surrounding text with | is required to avoid message content like space being unexpectedly removed by Discord
+    return `${getWrap(key)}${e("secret", key).slice(0, 3)}${getWrap(key)}` // surrounding text with | is required to avoid message content like space being unexpectedly removed by Discord
 }
 
 function getSuffix(key) {
@@ -33,7 +39,7 @@ function decryptMessage(text) {
 function encryptMessage(text) {
     let key = get(name, "key")
     let encrypted = encryptNewLine(e(text, key))
-    return `${getPrefix(key)}${encrypted}|`
+    return `${getPrefix(key)}${encrypted}${getWrap(key)}`
 }
 
 // replace new line character with space to avoid message being long
