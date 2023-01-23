@@ -1,6 +1,8 @@
 # SecretMessage
 A plugin of Enmity (Custom Discord Client for iOS) to send secret messages that only your friends can understand!
 
+Currently implements XOR encryption. This can only be somewhat secure if the key length is close to the length of the message. https://stackoverflow.com/questions/1135186/whats-wrong-with-xor-encryption
+
 ## Install
 https://raw.githubusercontent.com/m4fn3/SecretMessage/master/dist/SecretMessage.js
 
