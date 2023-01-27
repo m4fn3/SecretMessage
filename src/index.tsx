@@ -53,6 +53,9 @@ const SecretMessage: Plugin = {
             initVariable(...meta)
         })
 
+        // @ts-ignore // disable HideGiftButton if enabled
+        window.enmity.plugins.disablePlugin("HideGiftButton")
+
         let giftButtonID = null
         let sendButtonId = getIDByName("ic_send")
         let orgSendButtonColor = "#5865f2"
