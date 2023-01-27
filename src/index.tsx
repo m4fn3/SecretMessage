@@ -1,4 +1,4 @@
-import {Plugin, registerPlugin} from 'enmity/managers/plugins'
+import {getPlugin, Plugin, registerPlugin} from 'enmity/managers/plugins'
 import {React, Messages} from 'enmity/metro/common'
 import {Pressable} from 'enmity/components'
 import {bulk, filters} from "enmity/modules"
@@ -53,8 +53,10 @@ const SecretMessage: Plugin = {
             initVariable(...meta)
         })
 
-        // @ts-ignore // disable HideGiftButton if enabled
-        window.enmity.plugins.disablePlugin("HideGiftButton")
+        if (getPlugin("HideGiftButton")){
+            // @ts-ignore // disable HideGiftButton if enabled
+            window.enmity.plugins.disablePlugin("HideGiftButton")
+        }
 
         let giftButtonID = null
         let sendButtonId = getIDByName("ic_send")
