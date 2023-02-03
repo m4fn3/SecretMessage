@@ -47,7 +47,7 @@ const SecretMessage: Plugin = {
         this.commands = [secret]
 
         // initialize variables
-        const metas = [["enabled", false], ["key", "default"], ["hijack_gift", true]]
+        const metas = [["enabled", false], ["key", "default"], ["hijack_gift", true], ["shorten_text", true]]
         metas.forEach((meta) => {
             // @ts-ignore
             initVariable(...meta)

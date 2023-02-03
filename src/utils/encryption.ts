@@ -98,7 +98,7 @@ function hukugouKaigyou(text) { // replace with spaces commonly used
 }
 
 function angouKaigyou(text) {
-    return text.replaceAll("\x0B", "\u2002").replaceAll("\x0C", "\u2003").replaceAll("\r", "\u2004").replaceAll("\n", "\u2001")
+    return get(name, "shorten_text") ? text.replaceAll("\x0B", "\u2002").replaceAll("\x0C", "\u2003").replaceAll("\r", "\u2004").replaceAll("\n", "\u2001") : text
 }
 
 export {e, decryptMessage, encryptMessage, getSikibetu, getSuffix}

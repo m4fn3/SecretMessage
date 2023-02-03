@@ -14,6 +14,7 @@ interface SettingsProps {
 
 const LockIcon = getIDByName('ic_lock')
 const GiftIcon = getIDByName('ic_gift')
+const ChatIcon = getIDByName('ic_dm_user')
 const ReloadIcon = getIDByName('ic_message_retry')
 const GitHubIcon = getIDByName('img_account_sync_github_white')
 const DiscordIcon = getIDByName('Discord')
@@ -107,6 +108,19 @@ export default ({settings}: SettingsProps) => {
                             value={settings.getBoolean("hijack_gift",false)}
                             onValueChange={(value) => {
                                 settings.set("hijack_gift", value)
+                            }}
+                        />
+                    }
+                />
+                <FormRow
+                    label="Auto shorten text"
+                    subLabel="Shorten encrypted text by replacing specific char. You can try disabling it if you are being detected by automod :D"
+                    leading={<FormRow.Icon source={ChatIcon}/>}
+                    trailing={
+                        <FormSwitch
+                            value={settings.getBoolean("shorten_text",true)}
+                            onValueChange={(value) => {
+                                settings.set("shorten_text", value)
                             }}
                         />
                     }
