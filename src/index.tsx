@@ -8,10 +8,10 @@ import {create} from 'enmity/patcher'
 // @ts-ignore
 import manifest, {name} from '../manifest.json'
 import Settings from "./components/Settings"
-import {getStoreHandlers} from "./utils/store"
+import {getStoreHandlers} from "../../hook"
 import {decryptMessage, encryptMessage, getSuffix} from "./utils/encryption"
 import {get, set} from "enmity/api/settings"
-import {secret} from "./components/Commands";
+import {secret} from "./components/Commands"
 
 const Patcher = create('SecretMessage')
 
