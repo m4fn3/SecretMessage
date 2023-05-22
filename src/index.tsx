@@ -87,9 +87,10 @@ const SecretMessage: Plugin = {
                         Keyboard.dismissKeyboard()
                     }
                 } else if (buttonType == "send") {
-                    let color = res.props?.style[0][1]?.backgroundColor
+                    let idx = res.props?.style[0][1]?.backgroundColor ? 1 : 2 // depends on the version! 旧版 : 1が送信ボタン / 新版 : 0がマイク,1はなし,2が送信
+                    let color = res.props?.style[0][idx]?.backgroundColor
                     if (color && color != "#e74c3c") orgSendButtonColor = color  // save original color as it may be theme specific; default color is #5865f2
-                    res.props.style[0][1].backgroundColor = get(name, "enabled") ? "#e74c3c" : orgSendButtonColor
+                    res.props.style[0][idx].backgroundColor = get(name, "enabled") ? "#e74c3c" : orgSendButtonColor
                 }
             }
         })

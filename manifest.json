@@ -1,6 +1,6 @@
 {
    "name": "SecretMessage",
-   "version": "1.0.2",
+   "version": "1.0.3",
    "description": "Send secret message that only your friend can understand.",
    "authors": [
       {
