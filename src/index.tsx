@@ -1,7 +1,7 @@
 import {getPlugin, Plugin, registerPlugin} from 'enmity/managers/plugins'
 import {React, Messages} from 'enmity/metro/common'
 import {Pressable} from 'enmity/components'
-import {bulk, filters} from "enmity/modules"
+import {bulk, filters, getByProps} from "enmity/modules"
 import {findInReactTree} from "enmity/utilities"
 import {getByID, getIDByName} from "enmity/api/assets"
 import {create} from 'enmity/patcher'
@@ -23,14 +23,19 @@ const [
 
 const [
     Keyboard,
-    ChatInput
+    ChatInput,
+    Assets
 ] = bulk(
     filters.byProps("openSystemKeyboard"),
-    filters.byName("ChatInput", false)
+    filters.byName("ChatInput", false),
+    filters.byProps("getAssetUriForEmbed")
 )
 
 const ShowIcon = getIDByName("ic_show_password")
 const HideIcon = getIDByName("ic_hide_password")
+
+const ReactNative = getByProps("View")
+const {DCDChatManager} = ReactNative.NativeModules
 
 function initVariable(valName, defVal, force = false) {
     if (force) {
@@ -53,7 +58,7 @@ const SecretMessage: Plugin = {
             initVariable(...meta)
         })
 
-        if (getPlugin("HideGiftButton")){
+        if (getPlugin("HideGiftButton")) {
             // @ts-ignore // disable HideGiftButton if enabled
             window.enmity.plugins.disablePlugin("HideGiftButton")
         }
@@ -101,6 +106,27 @@ const SecretMessage: Plugin = {
             if (obj) {
                 obj.props.placeholder = get(name, "enabled") ? "Send *secret* message" : "Send normal message"
             }
+        })
+
+        Patcher.before(DCDChatManager, "updateRows", (_, args, __) => {
+            const rows = JSON.parse(args[1])
+            for (const row of rows) {
+                if (row.message?.content && Array.isArray(row.message?.content)) {
+                    let lastContent = row.message.content[row.message.content.length - 1]
+                    if (lastContent.type === "inlineCode" && lastContent.content.startsWith("<") && lastContent.content.endsWith(">")) {
+                        let key = lastContent.content.slice(1, -1)
+                        row.message.content[row.message.content.length - 1] = {
+                            type: 'channelMention',
+                            content: [{
+                                type: 'channel',
+                                content: [{"type": "text", "content": key}],
+                                icon: Assets.getAssetUriForEmbed(getIDByName("ic_channel_lock_16px"))
+                            }]
+                        }
+                    }
+                }
+            }
+            args[1] = JSON.stringify(rows)
         })
 
         // Decrypt messages you received
