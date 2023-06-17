@@ -120,7 +120,7 @@ const SecretMessage: Plugin = {
                             content: [{
                                 type: 'channel',
                                 content: [{"type": "text", "content": key}],
-                                icon: Assets.getAssetUriForEmbed(getIDByName("ic_channel_lock_16px"))
+                                icon: Assets.getAssetUriForEmbed(getIDByName("ic_full_server_gating_24px"))
                             }]
                         }
                     }
